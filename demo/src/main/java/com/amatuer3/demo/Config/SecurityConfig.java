@@ -11,15 +11,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-@Bean
-public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http
-        .csrf(csrf -> csrf.disable()) 
-        .authorizeHttpRequests(auth -> auth
-            .anyRequest().permitAll() // Fungua kila kitu 100%
-        )
-        .headers(headers -> headers.frameOptions(frame -> frame.disable())) // Ruhusu iFrame kama unazitumia
-        .formLogin(form -> form.disable());
 
-    return http.build();
-}}
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                .anyRequest().permitAll()
+            )
+            .headers(headers -> headers.frameOptions(frame -> frame.disable()))
+            .formLogin(form -> form.disable());
+
+        return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
+    }
+}
