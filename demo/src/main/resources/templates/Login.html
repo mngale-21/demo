@@ -2,285 +2,179 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- MUHIMU KWA SIMU -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Amateur System</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         body { 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            min-height: 100vh; /* Iweze kurefuka kulingana na content */
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
             background-color: #020617; 
-            position: relative;
-            padding: 20px; /* Nafasi pembeni kwenye simu */
-        }
-
-        /* Background Glow */
-        body::before {
-            content: "";
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(56, 189, 248, 0.1) 0%, transparent 70%);
-            top: -100px;
-            left: -100px;
-            z-index: 0;
-        }
-
-        .main-wrapper {
+            color: #f8fafc;
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
             display: flex;
-            width: 100%;
-            max-width: 1150px; /* Ukomo wa upana */
-            min-height: 680px; 
-            background: rgba(15, 23, 42, 0.95); 
-            backdrop-filter: blur(12px);
-            border-radius: 30px;
-            overflow: hidden;
-            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            z-index: 1;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
-        /* UPANDE WA KUSHOTO */
+        .login-card {
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            max-width: 1000px;
+            width: 100%;
+        }
+
         .left-side {
-            flex: 1.4; 
             background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
-            padding: 60px;
+            color: white;
+            padding: 40px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: white;
             text-align: center;
         }
 
-        .left-side h1 { font-size: 3.2rem; margin-bottom: 20px; font-weight: 800; letter-spacing: -1.5px; }
-        .left-side p { font-size: 1.15rem; opacity: 0.9; line-height: 1.6; max-width: 85%; }
-
         .student-img {
-            width: 100%;
-            max-width: 420px; 
-            margin-top: 40px;
+            max-width: 80%;
+            height: auto;
             animation: float 6s ease-in-out infinite;
-            filter: drop-shadow(0 35px 50px rgba(0,0,0,0.4));
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(1deg); }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
 
-        /* UPANDE WA KULIA (LOGIN) */
         .right-side {
-            flex: 1.1; 
-            padding: 50px 70px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
+            padding: 40px;
             background: rgba(10, 15, 30, 0.5);
         }
 
-        /* LOGO YENYE DUARA */
-        .logo-container {
-            width: 140px; 
-            height: 140px;
-            margin: 0 auto 25px auto;
-            position: relative;
-            padding: 5px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, rgba(56, 189, 248, 0.3), transparent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid rgba(56, 189, 248, 0.2);
+        .form-control {
+            background: #020617;
+            border: 1px solid #334155;
+            color: white;
+            padding: 12px 15px;
+            border-radius: 10px;
         }
 
-        .login-logo {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
+        .form-control:focus {
+            background: #020617;
+            color: white;
+            border-color: #38bdf8;
+            box-shadow: none;
         }
 
-        .lang-selector {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 0.75rem;
-        }
-        .lang-btn { color: #94a3b8; text-decoration: none; font-weight: 700; transition: 0.3s; }
-        .lang-btn:hover { color: #38bdf8; }
-
-        h2 { 
-            color: #f8fafc; 
-            margin-bottom: 30px; 
-            text-align: center;
-            font-size: 1.6rem; 
+        .btn-login {
+            background: #38bdf8;
+            color: #0f172a;
             font-weight: 800;
-        }
-
-        .input-group { margin-bottom: 18px; }
-
-        input { 
-            width: 100%; 
-            padding: 16px 20px; 
-            border: 1px solid #334155; 
-            border-radius: 14px; 
-            background: #020617; 
-            color: white; 
-            outline: none;
-            font-size: 1rem;
+            border-radius: 10px;
+            padding: 12px;
             transition: 0.3s;
         }
 
-        input:focus { border-color: #38bdf8; background: rgba(56, 189, 248, 0.05); }
-
-        .password-wrapper { position: relative; }
-        .toggle-eye {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: #64748b;
-            font-size: 10px;
-            font-weight: 900;
+        .btn-login:hover {
+            background: #7dd3fc;
+            transform: translateY(-2px);
         }
 
-        button { 
-            width: 100%; 
-            padding: 16px; 
-            background: #38bdf8; 
-            color: #0f172a; 
-            border: none; 
-            border-radius: 14px; 
-            cursor: pointer; 
-            font-weight: 800; 
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
+        .logo-container {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px auto;
+            border-radius: 50%;
+            border: 2px solid rgba(56, 189, 248, 0.2);
+            padding: 5px;
         }
 
-        button:hover { background-color: #7dd3fc; transform: translateY(-2px); }
-
-        .forgot-pass {
-            margin-top: 25px;
-            display: block;
-            color: #64748b;
-            text-decoration: none;
+        .error-msg {
+            color: #fb7185;
             font-size: 0.85rem;
-            text-align: center;
-        }
-
-        .page-footer {
-            margin-top: 30px;
-            color: #475569;
-            font-size: 0.8rem;
-            text-align: center;
-            padding-bottom: 20px;
-        }
-
-        .error-msg { 
-            color: #fb7185; 
-            font-size: 0.85rem; 
-            background: rgba(251, 113, 133, 0.1); 
-            padding: 12px; 
-            border-radius: 10px; 
-            margin-bottom: 20px; 
+            background: rgba(251, 113, 133, 0.1);
             border-left: 4px solid #fb7185;
-            text-align: center;
-        }
-
-        /* --- RESPONSIVE DESIGN KWA AJILI YA SIMU --- */
-        @media (max-width: 900px) {
-            .main-wrapper {
-                flex-direction: column; /* Inakaa juu na chini */
-                height: auto;
-                min-height: unset;
-                border-radius: 20px;
-            }
-
-            .left-side {
-                padding: 40px 20px;
-            }
-
-            .left-side h1 { font-size: 2.2rem; }
-            .left-side p { font-size: 1rem; }
-            .student-img { max-width: 250px; margin-top: 20px; }
-
-            .right-side {
-                padding: 40px 30px;
-                background: #0f172a;
-            }
-
-            .logo-container { width: 100px; height: 100px; }
-            .lang-selector { top: 15px; right: 15px; }
+            padding: 10px;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
 
-    <div class="main-wrapper">
-        <div class="left-side">
-            <h1>Amateur System</h1>
-            <p>Empowering the next generation of scholars through seamless record management.</p>
-            <img src="/images/Mwanafunzi.jpg" alt="Academic Excellence" class="student-img">
+<div class="login-card">
+    <div class="row g-0">
+        <!-- Upande wa Picha (Unajificha kwenye simu ndogo sana kama ukipenda, au unakaa juu) -->
+        <div class="col-lg-6 d-none d-lg-flex left-side">
+            <h1 class="fw-bold">Amateur System</h1>
+            <p class="opacity-75">Empowering the next generation of scholars through seamless record management.</p>
+            <img src="/images/Mwanafunzi.jpg" alt="Student" class="student-img mt-4">
         </div>
 
-        <div class="right-side">
-            <div class="lang-selector">
-                <a th:href="@{/(lang='en')}" class="lang-btn">EN</a> | 
-                <a th:href="@{/(lang='sw')}" class="lang-btn">SW</a>
-            </div>  
-
-            <div class="logo-container">
-                <img src="/images/logo.png" alt="Logo" class="login-logo">
+        <!-- Upande wa Login -->
+        <div class="col-lg-6 right-side">
+            <div class="d-flex justify-content-end mb-3">
+                <a th:href="@{/(lang='en')}" class="text-decoration-none small text-secondary fw-bold">EN</a>
+                <span class="mx-2 text-secondary">|</span>
+                <a th:href="@{/(lang='sw')}" class="text-decoration-none small text-secondary fw-bold">SW</a>
             </div>
 
-            <h2>Sign In</h2>
-            
-            <div th:if="${param.error}" class="error-msg">
+            <div class="text-center">
+                <div class="logo-container">
+                    <img src="/images/logo.png" alt="Logo" class="img-fluid rounded-circle">
+                </div>
+                <h2 class="fw-bold mb-4">Sign In</h2>
+            </div>
+
+            <div th:if="${param.error}" class="error-msg mb-3 text-center">
                 Invalid Username or Password.
             </div>
 
             <form th:action="@{/login}" method="POST">
-                <div class="input-group">
-                    <input type="text" name="username" placeholder="Registration Number" required>
+                <div class="mb-3">
+                    <label class="form-label small text-secondary">Registration Number</label>
+                    <input type="text" name="username" class="form-control" placeholder="T/UDOM/..." required>
                 </div>
                 
-                <div class="input-group password-wrapper">
-                    <input type="password" id="password" name="password" placeholder="Password" required>
-                    <span class="toggle-eye" onclick="togglePassword()" id="eyeIcon">SHOW</span>
+                <div class="mb-3">
+                    <label class="form-label small text-secondary">Password</label>
+                    <div class="input-group">
+                        <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required>
+                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword()" id="eyeBtn">SHOW</button>
+                    </div>
                 </div>
-                
-                <button type="submit">LOG INTO SYSTEM</button>
+
+                <button type="submit" class="btn btn-login w-100 mt-3">LOG INTO SYSTEM</button>
             </form>
 
-            <a href="/forgot_password" class="forgot-pass">Forgot password?</a>
+            <div class="text-center mt-4">
+                <a href="/forgot_password" class="text-secondary small text-decoration-none">Forgot password?</a>
+            </div>
         </div>
     </div>
+</div>
 
-    <footer class="page-footer">
-        &copy; 2026 Amateur System | Developed by Evodi Phinnance
-    </footer>
-
-    <script>
-        function togglePassword() {
-            const passwordField = document.getElementById('password');
-            const eyeIcon = document.getElementById('eyeIcon');
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                eyeIcon.textContent = 'HIDE';
-            } else {
-                passwordField.type = 'password';
-                eyeIcon.textContent = 'SHOW';
-            }
+<script>
+    function togglePassword() {
+        const passwordField = document.getElementById('password');
+        const eyeBtn = document.getElementById('eyeBtn');
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            eyeBtn.textContent = 'HIDE';
+        } else {
+            passwordField.type = 'password';
+            eyeBtn.textContent = 'SHOW';
         }
-    </script>
+    }
+</script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
